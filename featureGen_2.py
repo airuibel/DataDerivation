@@ -692,16 +692,18 @@ def fields_handle(x):
     return str(x)
 
 
+# 写入结果到文件
+with open("head") as f:
+    head = f.read().replace("\n","").split("^")
 def write_resutl_to_file(result,result_file):
     values = []
-    with open("head") as f:
-        head = f.read().replace("\n","").split("^")
-        for field in head:
-            value =result.get(field,"")
-            values.append(value)
+    for field in head:
+        value =result.get(field,"")
+        values.append(value)
     line = ",".join(list(map(fields_handle,values))) + "\n"
     with open(result_file,"a",encoding="utf-8") as f:
         f.write(line)
+
 
 
 def main():
