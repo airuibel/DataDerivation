@@ -1,0 +1,268 @@
+1 本人基础数据
+living_city	生活城市	休息时间通话占比最大的城市
+friends_city	朋友圈城市   联系人分布最多的城市
+last_contact	最近一次通话时间
+silence_5m	5个月天关机天数	一天无通话记录
+keep_touch_max_day	连续通话的最大天数
+contacts_completeness	通话记录完整性  与关机天数相反
+keep_touch_7day	近7天工作日是否一直联系
+keep_touch_1m	近1月工作日是否一直联系
+keep_touch_3m	近3月工作日是否一直联系
+living_city_attribution	生活城市是否为归属地
+living_city_friends_city	生活城市是否为朋友圈城市
+living_city_irthplace	生活城市是否为出生城市
+
+2 本人出行通话 1个月，3个月，5个月
+city_cnt	出行地区个数
+first_tier_city_cnt	出行一线城市个数
+normal_city_cnt	出行非一线个数
+trip_days_cnt	出行天数
+trip_cnt	出行次数
+trip_day_rate	出行天数在总天数中的占比
+trip_contacts_cnt	出行通话次数
+trip_contacts_rate	出行通话次数占比
+trip_holiday_days_cnt	节假日出行天数   出行中含有节假日
+trip_holiday_days_rate	节假日出行天数占总出行天数 占比
+trip_holiday_cnt	节假日出行次数
+trip_holiday_rate	节假日出行次数占总出行次数 占比
+
+3 通话时长 7天 1个月，3个月，5个月
+contacter_0_10_cnt	联系人个数
+contacter_0_10_rate	联系人个数占比
+call_0_10_cnt	通话次数
+call_0_10_rate	通话次数占比
+caller_0_10_cnt	主叫通话次数
+called_0_10_cnt	被叫通话次数
+calls_0_10_cnt	互相通话次数
+contacter_10_20_cnt	联系人个数
+contacter_10_20_rate	联系人个数占比
+call_10_20_cnt	通话次数
+call_10_20_rate	通话次数占比
+caller_10_20_cnt	主叫通话次数
+called_10_20_cnt	被叫通话次数
+calls_10_20_cnt	互相通话次数
+contacter_20_30_cnt	联系人个数
+contacter_20_30_rate	联系人个数占比
+call_20_30_cnt	通话次数
+call_20_30_rate	通话次数占比
+caller_20_30_cnt	主叫通话次数
+called_20_30_cnt	被叫通话次数
+calls_20_30_cnt	互相通话次数
+contacter_30_60_cnt	联系人个数
+contacter_30_60_rate	联系人个数占比
+call_30_60_cnt	通话次数
+call_30_60_rate	通话次数占比
+caller_30_60_cnt	主叫通话次数
+called_30_60_cnt	被叫通话次数
+calls_30_60_cnt	互相通话次数
+contacter_60_120_cnt	联系人个数
+contacter_60_120_rate	联系人个数占比
+call_60_120_cnt	通话次数
+call_60_120_rate	通话次数占比
+caller_60_120_cnt	主叫通话次数
+called_60_120_cnt	被叫通话次数
+calls_60_120_cnt	互相通话次数
+contacter_120_180_cnt	联系人个数
+contacter_120_180_rate	联系人个数占比
+call_120_180_cnt	通话次数
+call_120_180_rate	通话次数占比
+caller_120_180_cnt	主叫通话次数
+called_120_180_cnt	被叫通话次数
+calls_120_180_cnt	互相通话次数
+contacter_180_up_cnt	联系人个数
+contacter_180_up_rate	联系人个数占比
+call_180_up_cnt	通话次数
+call_180_up_rate	通话次数占比
+caller_180_up_cnt	主叫通话次数
+called_180_up_cnt	被叫通话次数
+calls_180_up_cnt	互相通话次数
+
+4 通话时段 7天 1个月，3个月，5个月
+call_early_morning_cnt	通话次数
+call_early_morning_rate	通话次数比例
+call_early_morning_time	通话时长
+contacter_early_morning_cnt	该时段的联系人个数
+call_morning_cnt	通话次数
+call_morning_rate	通话次数比例
+call_morning_time	通话时长
+contacter_morning_cnt	该时段的联系人个数
+call_nooning_cnt	通话次数
+call_nooning_rate	通话次数比例
+call_nooning_time	通话时长
+contacter_nooning_cnt	该时段的联系人个数
+call_afternoon_cnt	通话次数
+call_afternoon_rate	通话次数比例
+call_afternoon_time	通话时长
+contacter_afternoon_cnt	该时段的联系人个数
+call_toward_evening_cnt	通话次数
+call_toward_evening_rate	通话次数比例
+call_toward_evening_time	通话时长
+contacter_toward_evening_cnt	该时段的联系人个数
+call_evening_cnt	通话次数
+call_evening_rate	通话次数比例
+call_evening_time	通话时长
+contacter_evening_cnt	该时段的联系人个数
+call_small_hour_cnt	通话次数
+call_small_hour_rate	通话次数比例
+call_small_hour_time	通话时长
+contacter_small_hour_cnt	该时段的联系人个数
+call_midnight_cnt	通话次数
+call_midnight_rate	通话次数比例
+call_midnight_time	通话时长
+contacter_midnight_cnt	该时段的联系人个数
+call_weekday_cnt	通话次数
+call_weekday_rate	通话次数比例
+call_weekday_time	通话时长
+contacter_weekday_cnt	该时段的联系人个数
+call_weekend_cnt	通话次数
+call_weekend_rate	通话次数比例
+call_weekend_time	通话时长
+contacter_weekend_cnt	该时段的联系人个数
+call_holiday_cnt	通话次数
+call_holiday_rate	通话次数比例
+call_holiday_time	通话时长
+contacter_holiday_cnt	该时段的联系人个数
+
+5 联系人标签 1个月，3个月，5个月
+call_110_cnt	通话次数
+call_110_rate	通话次数占比
+call_110_time	通话时长
+call_110_rate	通话时长占比
+call_120_cnt	通话次数
+call_120_rate	通话次数占比
+call_120_time	通话时长
+call_120_rate	通话时长占比
+call_119_cnt	通话次数
+call_119_rate	通话次数占比
+call_119_time	通话时长
+call_119_rate	通话时长占比
+call_bank_cnt	通话次数
+call_bank_rate	通话次数占比
+call_bank_time	通话时长
+call_bank_rate	通话时长占比
+contacter_bank_cnt	联系人的数量
+call_loan_cnt	通话次数
+call_loan_rate	通话次数占比
+call_loan_time	通话时长
+call_loan_rate	通话时长占比
+contacter_loan_cnt	联系人的数量
+call_insurance_cnt	通话次数
+call_insurance_rate	通话次数占比
+call_insurance_time	通话时长
+call_insurance_rate	通话时长占比
+contacter_insurance_cnt	联系人的数量
+call_risk_cnt	通话次数
+call_risk_rate	通话次数占比
+call_risk_time	通话时长
+call_risk_rate	通话时长占比
+contacter_risk_cnt	联系人的数量
+call_credit_card_cnt	通话次数
+call_credit_card_rate	通话次数占比
+call_credit_card_time	通话时长
+call_credit_card_rate	通话时长占比
+contacter_credit_card_cnt	联系人的数量
+
+6 联系人地区 1个月，3个月，5个月
+contacter_city_cnt	联系人通话城市个数
+contacter_nonlocal_cnt	异地联系人个数（相对于工作地点的异地）
+contacter_nonlocal_rate	异地联系人占比（相对于工作地点的异地）
+call_nonlocal_time	异地通话时长（相对于工作地点的异地）
+call_nonlocal_cnt	异地通话次数（相对于工作地点的异地）
+call_nonlocal_rate	异地通话次数（相对于工作地点的异地）占比
+contacter_first_tier_city_cnt	一线城市联系人个数
+contacter_first_tier_city_rate	一线城市联系人占比
+call_first_tier_city_time	一线城市通话时长
+call_first_tier_city_cnt	一线城市通话次数
+call_first_tier_city_rate	一线城市通话次数 占比
+contacter_normal_city__cnt	非一线城市联系人个数
+contacter_normal_city__rate	非一线城市联系人占比
+call_normal_city_time	非一线城市通话时长
+call_normal_city_cnt	非一线城市通话次数
+call_normal_city_rate	非一线城市通话次数占比
+contacter_risk_area_cnt	电信诈骗高危地区联系人个数
+contacter_risk_area_rate	电信诈骗高危地区联系人占比
+call_risk_area_time	电信诈骗高危地区通话时长
+call_risk_area_cnt	电信诈骗高危地区通话次数
+call_risk_area_rate	电信诈骗高危地区通话次数占比
+contacter_foreign_cnt	港澳台海外地区联系人个数
+contacter_foreign_rate	港澳台海外地区联系人占比
+call_foreign_time	港澳台海外地区通话时长
+call_foreign_cnt	港澳台海外地区通话次数
+call_foreign_rate	港澳台海外地区次数占比
+contacter_west_cnt	西部等偏远地区联系人个数
+contacter_west_rate	西部等偏远地区联系人占比
+call_west_time	西部等偏远地区通话时长
+call_west_cnt	西部等偏远地区通话次数
+call_west_rate	西部等偏远地区次数占比
+
+7.联系人数量 7天 1个月，3个月，5个月
+contacts_month_over_cnt	月均联系超多少次的联系人个数
+contacts_month_time_over_cnt	月均联系时长超多少次的联系人个数
+contacts_month_over_rate	月均联系超多少次的联系人个数占比
+contacts_month_time_over_rate	月均联系时长超多少次的联系人个数占比
+contacts_day_over_cnt	日均联系超多少次的联系人个数
+contacts_day_time_over_cnt	日均联系时长超多少次的联系人个数
+contacts_day_over_rate	日均联系超多少次的联系人个数占比
+contacts_day_time_over_rate	日均联系时长超多少次的联系人个数占比
+contacter_cnt	联系人数量
+contacts_cnt	互通联系人数量
+contacts_intimate	亲密联系人数量
+
+8 通话总体分析  7天 1个月，3个月，5个月
+call_max_time	最大通话时长
+call_month_cnt	月通话次数
+call_avg_month_cnt	月平均通话次数
+call_month_time	月通话时长（秒
+call_avg_month_time	月平均通话时长（秒
+caller_month_cnt	月主叫通话次数
+caller_month_rate	月主叫通话次数 占比
+caller_avg_month_cnt	月主叫月均通话次数
+caller_month_time	月主叫通话时长
+caller_month_time_rate	月主叫通话时长 占比
+caller_avg_month_time	月主叫月均通话时长
+called_month_cnt	月被叫通话次数
+called_month_rate	月被叫通话次数 占比
+called_avg_month_cnt	月被叫月均通话次数
+called_month_time	月被叫通话时长
+called_month_time_rate	月被叫通话时长 占比
+called_avg_month_time	月被叫月均通话时长
+calls_month_cnt	月互通通话次数
+calls_month_rate	月互通通话次数 占比
+calls_avg_month_cnt	月互通月均通话次数
+calls_month_time	月互通通话时长
+calls_month_time_rate	月互通通话时长 占比
+calls_avg_month_time	月互通月均通话时长
+
+9 亲情号码通话分析  7天 1个月，3个月，5个月
+family_call_cnt	通话次数
+family_call_rate	次数占比
+family_call_time	通话时长
+family_call_time_rate	时长占比
+family_caller_cnt	主叫次数
+family_caller_time	主叫时长
+family_called_cnt	被叫次数
+family_called_time	被叫时长
+family_call_weekend_cnt	节假日通话次数
+family_call_weekend_time	节假日通话时长
+family_call_weekday_cnt	工作日通话次数
+family_call_weekday_time	工作日通话时长
+
+10 通话费用
+call_fee_0_10_cnt	通话次数
+call_fee_0_10_rate	通话次数占比
+contacter_call_fee_0_10_cnt	联系人的个数
+call_fee_10_20_cnt	通话次数
+call_fee_10_20_rate	通话次数占比
+contacter_call_fee_10_20_cnt	联系人的个数
+call_fee_20_50_cnt	通话次数
+call_fee_20_50_rate	通话次数占比
+contacter_call_fee_20_50_cnt	联系人的个数
+call_fee_50_100_cnt	通话次数
+call_fee_50_100_rate	通话次数占比
+contacter_call_fee_50_100_cnt	联系人的个数
+call_fee_100_500_cnt	通话次数
+call_fee_100_500_rate	通话次数占比
+contacter_call_fee_100_500_cnt	联系人的个数
+call_fee_500_up_cnt	通话次数
+call_fee_500_up_rate	通话次数占比
+contacter_call_fee_500_up_cnt	联系人的个数
