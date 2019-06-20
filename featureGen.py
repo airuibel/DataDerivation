@@ -684,10 +684,6 @@ def get_bill_feature(data, total_dict):
 def fields_handle(x):
     if isinstance(x,int):
         x =str(x)
-    elif x == True:
-        x = '1'
-    elif x == False:
-        x = "0"
     elif x==None:
         x =""
     return str(x)
@@ -710,11 +706,12 @@ def write_resutl_to_file(result,success_file):
 
 def main():
     # 特征提取结果文件
-    success_file = "result_4.csv"
+    success_file = "datafeature/success/feature.csv"
     # 提取错误数据保存的文件
-    failed_file = "failed_4"
+    failed_file = "datafeature/failed/failed"
     # 源数据文件
-    source_file =  "failed"
+    source_file =  "dataset/ykd_clear_file/ykd_1.txt"
+    # 文件读取
     f = open(source_file,encoding="utf-8")
     for index,line in enumerate(f):
         print(source_file,index)
@@ -764,10 +761,11 @@ def main():
             # 记录错误的数据到文件
             with open(failed_file,"a",encoding="utf") as f:
                 f.write(line)
+    # 源文件关闭
     f.close()
 
 
 
 
-
-main()
+if __name__ == "__main__":
+    main()
