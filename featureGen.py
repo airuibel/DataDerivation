@@ -6,11 +6,15 @@ import time
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
-
 from tools.findRegion import findAttribution,findRegion
 from tools.date import  get_date_type
 from tools.cityType import cityOne, cityTwo, cityWest, cityForeign, cityRisk ,get_city_type
 
+
+# 数据衍生文件，
+# 字段的True表示为1，False为0
+# 数字字段的空 为None
+# 字符串的空 为 ''
 
 
 # =============设置打印展示输出===========
