@@ -65,16 +65,16 @@ def call_basic(callRecord,basicInfo):
     contacts_completeness = callRecord_m5['time'].dt.strftime("%Y-%m-%d").nunique()/m5
     # 近7天是否一直联系,最近一次通话往前推7天
     callRecord_day7 = callRecord[(callRecord['time'].max() - callRecord['time']).dt.days < day7].copy()
-    keep_touch_7day = callRecord_day7['time'].dt.strftime("%Y-%m-%d").nunique() == 7
+    keep_touch_7day = 1 if(callRecord_day7['time'].dt.strftime("%Y-%m-%d").nunique() == 7) else 0
     # 近30天是否一直联系，同上
     callRecord_m1 = callRecord[(callRecord['time'].max()  - callRecord['time']).dt.days < m1].copy()
-    keep_touch_1m = callRecord_m1['time'].dt.strftime("%Y-%m-%d").nunique() == 30
+    keep_touch_1m = 1 if (callRecord_m1['time'].dt.strftime("%Y-%m-%d").nunique() == 30) else 0
     # 生活城市是否为归属地
-    living_city_attribution = location == attribution
+    living_city_attribution = 1 if location == attribution else 0
     # 生活城市是否为朋友圈城市
-    living_city_friends_city = location == friends_city_
+    living_city_friends_city = 1 if location == friends_city_ else 0
     # 生活城市是否为出生城市
-    living_city_birthplace = location in birthplace if birthplace else False
+    living_city_birthplace = 1 if (location in birthplace if birthplace else False) else 0
     # 连续通话的最大天数
     # 排序时间后迭代时间，把累加的连续天数加入一个列表，取列表的最大值
     time_sort_df = callRecord_c["time"].sort_values()
@@ -680,6 +680,7 @@ def get_bill_feature(data, total_dict):
     return total_dict
 
 
+# 字段类型的转换
 def fields_handle(x):
     if isinstance(x,int):
         x =str(x)
@@ -693,37 +694,42 @@ def fields_handle(x):
 
 
 # 写入结果到文件
+# 获取字段表头
 with open("head") as f:
     head = f.read().replace("\n","").split("^")
-def write_resutl_to_file(result,result_file):
+# 行数据的写入
+def write_resutl_to_file(result,success_file):
     values = []
     for field in head:
         value =result.get(field,"")
         values.append(value)
     line = ",".join(list(map(fields_handle,values))) + "\n"
-    with open(result_file,"a",encoding="utf-8") as f:
+    with open(success_file,"a",encoding="utf-8") as f:
         f.write(line)
 
 
 def main():
-    # 结果和错误的文件名
-    result_file = "result_4.csv"
+    # 特征提取结果文件
+    success_file = "result_4.csv"
+    # 提取错误数据保存的文件
     failed_file = "failed_4"
-
-    real_name =  "failed"
-    f = open(real_name,encoding="utf-8")
+    # 源数据文件
+    source_file =  "failed"
+    f = open(source_file,encoding="utf-8")
     for index,line in enumerate(f):
-        print(real_name,index)
-        line = line.split(".txt^")[-1]
+        print(source_file,index)
         record = json.loads(line)
         try:
+            # 一.四种类型数据的获取
             basicInfo_ = record["basicInfo"]
             billRecord_ = record["billRecord"]
             callRecord_ = record["callRecord"]
             payRecord_ = record["payRecord"]
             smsRecord_ = record["smsRecord"]
+
+            # 二.============ dataframe的预处理===============
+            # 1.callRecord的预处理
             # 删除detail_id,location_type特征
-            basicInfo = basicInfo_
             callRecord = pd.DataFrame(pd.read_json(json.dumps(callRecord_)))
             callRecord.drop(["details_id", "location_type"], axis=1, inplace=True)
             # 格式化时间
@@ -735,8 +741,9 @@ def main():
             # 添加联系人的归属地
             callRecord["peer_localtion"] = callRecord["peer_number"].map(findAttribution)
 
+            # 三.==========进行特征衍生，保存结果到大字典=============
             result = dict()
-            result.update(call_basic(callRecord,basicInfo))
+            result.update(call_basic(callRecord,basicInfo_))
             for i in [m1,m3,m5]:
                 result.update(call_duration(callRecord,i))
                 result.update(call_period(callRecord,i))
@@ -744,16 +751,19 @@ def main():
                 result.update(contacter_num(callRecord,i))
                 result.update(call_summarizing(callRecord,i))
                 result.update(call_fee(callRecord,i))
-            # ==========微微==========
+            # -----------------微微-------------------
             result = get_info_data(basicInfo_, result)
             result = get_sms_feature(smsRecord_, result)
             result =get_pay_feature(payRecord_, result)
             result =get_bill_feature(billRecord_, result)
-            write_resutl_to_file(result,result_file)
+
+            # 四. ================存储结果到文件===============
+            write_resutl_to_file(result,success_file)
         except :
             traceback.print_exc()
+            # 记录错误的数据到文件
             with open(failed_file,"a",encoding="utf") as f:
-                f.write(real_name +"^"+line)
+                f.write(line)
     f.close()
 
 
