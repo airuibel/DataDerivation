@@ -1,3 +1,4 @@
+import traceback
 import pandas as pd
 import numpy as np
 import json
@@ -44,25 +45,19 @@ def call_basic(callRecord,basicInfo):
     attribution = findAttribution(basicInfo["mobile"])
     callRecord_c = callRecord.copy()
 
-    try:
-        # 生活城市 dataFrame为空时[0]错误
-        # 当取不到众数是，把localtion设置为"无"
-        location = callRecord[(callRecord["time"].dt.hour > 19) | (callRecord["time"].dt.hour < 7)]["location"].mode()[0]
-    except:
-        location = "无"
+    # 生活城市 dataFrame为空时[0]错误
+    # 当取不到众数是，把localtion设置为"无"
+    location_v = callRecord[(callRecord["time"].dt.hour > 19) | (callRecord["time"].dt.hour < 7)]["location"].mode()
+    location = location_v[0] if location_v else "无"
     living_city = get_city_type(location)
-    try:
-        # 朋友圈城市 正则筛选手机号，然后用手机号给对象去重，再取众数城市为朋友圈城市
-        friends_city_ = callRecord_c[callRecord_c["peer_number"].str.match("1[\d]{10}")]. \
-            loc[~callRecord_c["peer_number"].duplicated(keep='first')]["peer_localtion"].mode()[0]
-    except:
-        friends_city_ = "没有"
+    # 朋友圈城市 正则筛选手机号，然后用手机号给对象去重，再取众数城市为朋友圈城市
+    friends_city_v = callRecord_c[callRecord_c["peer_number"].str.match("1[\d]{10}")]. \
+        loc[~callRecord_c["peer_number"].duplicated(keep='first')]["peer_localtion"].mode()
+    friends_city_ = friends_city_v[0] if friends_city_v else "没有"
     friends_city = get_city_type(friends_city_)
     # 最近一次通话的时长
-    try:
-        last_contact_time = callRecord_c[callRecord_c["time"] ==callRecord_c["time"].max()]["duration"].values[0]
-    except:
-        last_contact_time = None
+    last_contact_time_v = callRecord_c[callRecord_c["time"] ==callRecord_c["time"].max()]["duration"].values
+    last_contact_time = last_contact_time_v[0] if last_contact_time_v else None
     # 五个月关机天数
     callRecord_m5 = callRecord[(callRecord['time'].max() - callRecord['time']).dt.days < m5].copy()
     silence_5m = m5 - callRecord_m5['time'].dt.strftime("%Y-%m-%d").nunique()
@@ -270,10 +265,8 @@ def contacter_location(callRecord,duration=m5):
     contacter_cnt = callRecord_c["peer_number"].nunique()
 
     # 1 异地的情况
-    try:
-        location = callRecord[(callRecord["time"].dt.hour > 19) | (callRecord["time"].dt.hour < 7)]["location"].mode()[0]
-    except:
-        location = "无"
+    location_v = callRecord[(callRecord["time"].dt.hour > 19) | (callRecord["time"].dt.hour < 7)]["location"].mode()
+    location = location_v[0] if location_v else "无"
     nonlocal_df = callRecord_c[callRecord_c["location"]!=location]
     result.update({
         f"contacter_city_cnt_{month_letter}":nonlocal_df["location"].shape[0],
@@ -337,7 +330,7 @@ def contacter_num(callRecord,duration=m5,num=5,dnum=1,_sum=100,_dsum=3):
 
     # 互通的联系人集合
     contacts_set = set(callRecord_c[caller]["peer_number"].unique()) & set(callRecord_c[called]["peer_number"].unique())
-    # 互通联系人的通话 Dataframe
+    # 互通联系人的通话 Dataframe,且通话时间大于60s
     contacts_df = callRecord_c[callRecord_c["peer_number"].isin(contacts_set)].loc[callRecord_c["duration"]>=60]
     # 亲密联系人，通话次数超过5次，主叫超过两次为亲密，最长通话时间超过180s,通话的天数大于一天
     contacts_intimate_set = set()
@@ -676,6 +669,17 @@ def get_bill_feature(data, total_dict):
     return total_dict
 
 
+def fields_handle(x):
+    if isinstance(int,x):
+        x =str(x)
+    elif x == True:
+        x = '1'
+    elif x == False:
+        x = "0"
+    elif x==None:
+        x =""
+    return str(x)
+
 
 def write_resutl_to_file(result):
     values = []
@@ -684,10 +688,9 @@ def write_resutl_to_file(result):
         for field in head:
             value =result.get(field,"")
             values.append(value)
-    line = ",".join(list(map(lambda x:str(x),values))) + "\n"
+    line = ",".join(list(map(fields_handle,values))) + "\n"
     with open("result.csv","a",encoding="utf-8") as f:
         f.write(line)
-
 
 
 def main():
@@ -731,7 +734,8 @@ def main():
                 result =get_pay_feature(payRecord_, result)
                 result =get_bill_feature(billRecord_, result)
                 write_resutl_to_file(result)
-            except Exception as e:
+            except :
+                traceback.print_exc()
                 with open("failed","a",encoding="utf") as f:
                     f.write(real_name +"^"+line)
         f.close()
