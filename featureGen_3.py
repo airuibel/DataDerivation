@@ -706,10 +706,10 @@ def write_resutl_to_file(result,result_file):
 
 def main():
     # 结果和错误的文件名
-    result_file = "result_2.csv"
-    failed_file = "failed_2"
+    result_file = "result_3.csv"
+    failed_file = "failed_3"
 
-    for i in range(80,120):
+    for i in range(120,160):
         real_name =  f"ykd_clear_file/ykd_{i}.txt"
         f = open(real_name,encoding="utf-8")
         for index,line in enumerate(f):

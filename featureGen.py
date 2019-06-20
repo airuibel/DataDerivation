@@ -48,16 +48,16 @@ def call_basic(callRecord,basicInfo):
     # 生活城市 dataFrame为空时[0]错误
     # 当取不到众数是，把localtion设置为"无"
     location_v = callRecord[(callRecord["time"].dt.hour > 19) | (callRecord["time"].dt.hour < 7)]["location"].mode()
-    location = location_v[0] if location_v else "无"
+    location = location_v[0] if len(location_v) else "无"
     living_city = get_city_type(location)
     # 朋友圈城市 正则筛选手机号，然后用手机号给对象去重，再取众数城市为朋友圈城市
     friends_city_v = callRecord_c[callRecord_c["peer_number"].str.match("1[\d]{10}")]. \
         loc[~callRecord_c["peer_number"].duplicated(keep='first')]["peer_localtion"].mode()
-    friends_city_ = friends_city_v[0] if friends_city_v else "没有"
+    friends_city_ = friends_city_v[0] if len(friends_city_v) else "没有"
     friends_city = get_city_type(friends_city_)
     # 最近一次通话的时长
     last_contact_time_v = callRecord_c[callRecord_c["time"] ==callRecord_c["time"].max()]["duration"].values
-    last_contact_time = last_contact_time_v[0] if last_contact_time_v else None
+    last_contact_time = last_contact_time_v[0] if len(last_contact_time_v) else None
     # 五个月关机天数
     callRecord_m5 = callRecord[(callRecord['time'].max() - callRecord['time']).dt.days < m5].copy()
     silence_5m = m5 - callRecord_m5['time'].dt.strftime("%Y-%m-%d").nunique()
@@ -218,7 +218,8 @@ def call_period(callRecord,duration=m5):
     if isinstance(group_result, pd.Series):
         result.update(group_result.reset_index(level=0, drop=1).to_dict())
     else:
-        result.update(group_result.to_dict(orient="records")[0])
+        result_list_v = group_result.to_dict(orient="records")
+        result.update(result_list_v[0] if result_list_v else {})
 
     # 2.分组 节假日类型
     callRecord_c["group"] = callRecord_c["time"].map(get_groups_name_2)
@@ -226,7 +227,8 @@ def call_period(callRecord,duration=m5):
     if isinstance(group_result, pd.Series):
         result.update(group_result.reset_index(level=0, drop=1).to_dict())
     else:
-        result.update(group_result.to_dict(orient="records")[0])
+        result_list_v = group_result.to_dict(orient="records")
+        result.update(result_list_v[0] if result_list_v else {})
 
     return result
 
@@ -266,7 +268,7 @@ def contacter_location(callRecord,duration=m5):
 
     # 1 异地的情况
     location_v = callRecord[(callRecord["time"].dt.hour > 19) | (callRecord["time"].dt.hour < 7)]["location"].mode()
-    location = location_v[0] if location_v else "无"
+    location = location_v[0] if len(location_v) else "无"
     nonlocal_df = callRecord_c[callRecord_c["location"]!=location]
     result.update({
         f"contacter_city_cnt_{month_letter}":nonlocal_df["location"].shape[0],
@@ -283,7 +285,8 @@ def contacter_location(callRecord,duration=m5):
     if isinstance(group_result, pd.Series):
         result.update(group_result.reset_index(level=0, drop=1).to_dict())
     else:
-        result.update(group_result.to_dict(orient="records")[0])
+        result_list_v = group_result.to_dict(orient="records")
+        result.update(result_list_v[0] if result_list_v else {})
 
     return result
 
@@ -312,7 +315,7 @@ def contacter_num(callRecord,duration=m5,num=5,dnum=1,_sum=100,_dsum=3):
     contacts_month_over_cnt = contacts_month_over_cnt_[True] if True in contacts_month_over_cnt_.index else 0
     # 月均联系时长超多少次的联系人个数
     contacts_month_time_over_cnt_ = callRecord_c.groupby("peer_number").apply(group_handle_1).value_counts()
-    contacts_month_time_over_cnt = contacts_month_time_over_cnt_[True] if True in contacts_month_over_cnt_.index else 0
+    contacts_month_time_over_cnt = contacts_month_time_over_cnt_[True] if True in contacts_month_time_over_cnt_.index else 0
     # 月均联系超多少次的联系人个数占比
     contacts_month_over_rate = contacts_month_over_cnt /contacter_cnt if contacter_cnt else None
     # 月均联系时长超多少次的联系人个数占比
@@ -322,7 +325,7 @@ def contacter_num(callRecord,duration=m5,num=5,dnum=1,_sum=100,_dsum=3):
     contacts_day_over_cnt =  contacts_day_over_cnt_[True] if True in contacts_day_over_cnt_.index else 0
     # 日均联系时长超多少次的联系人个数
     contacts_day_time_over_cnt_ = callRecord_c.groupby("peer_number").apply(group_handle_2).value_counts()
-    contacts_day_time_over_cnt = contacts_day_time_over_cnt_[True] if True in contacts_day_time_over_cnt_ else 0
+    contacts_day_time_over_cnt = contacts_day_time_over_cnt_[True] if True in contacts_day_time_over_cnt_.index else 0
     # 日均联系超多少次的联系人个数占比
     contacts_day_over_rate = contacts_day_over_cnt /contacter_cnt if contacter_cnt else None
     # 日均联系时长超多少次的联系人个数占比
@@ -395,7 +398,8 @@ def call_summarizing(callRecord,duration=m5):
     if isinstance(group_result, pd.Series):
         result.update(group_result.reset_index(level=0, drop=1).to_dict())
     else:
-        result.update(group_result.to_dict(orient="records")[0])
+        result_list_v = group_result.to_dict(orient="records")
+        result.update(result_list_v[0] if result_list_v else {})
 
     # 3.分组 互通
     caller = callRecord_c["dial_type"] == 1
@@ -450,7 +454,8 @@ def call_fee(callRecord,duration=m5):
     if isinstance(group_result, pd.Series):
         result.update(group_result.reset_index(level=0, drop=1).to_dict())
     else:
-        result.update(group_result.to_dict(orient="records")[0])
+        result_list_v = group_result.to_dict(orient="records")
+        result.update(result_list_v[0] if result_list_v else {})
 
     return result
 
@@ -458,7 +463,7 @@ def call_fee(callRecord,duration=m5):
 # ============== weiwei =======================
 def get_info_data(data, total_dict):
     now_time = time.strptime(datetime.strftime(datetime.now(), '%Y-%m-%d'), "%Y-%m-%d")
-    open_time = time.strptime(data['open_time'], "%Y-%m-%d")
+    open_time = time.strptime(data['open_time'], "%Y-%m-%d") if data['open_time'] else now_time
     date1 = datetime(now_time[0], now_time[1], now_time[2])
     date2 = datetime(open_time[0], open_time[1], open_time[2])
 
@@ -468,8 +473,11 @@ def get_info_data(data, total_dict):
     total_dict["idcard"] = data['idcard']
     total_dict["email"] = data['email']
 
-    if "*" not in data['idcard']:
-        total_dict["age"] = int(time.strftime("%Y")) - int(data['idcard'][6:10])
+    if "*" not in data['idcard'] and data['idcard']:
+        try:
+            total_dict["age"] = int(time.strftime("%Y")) - int(data['idcard'][6:10])
+        except:
+            pass
     else:
         total_dict["age"] = None
     total_dict["open_days"] = (date1 - date2).days
@@ -658,7 +666,10 @@ def get_bill_feature(data, total_dict):
     rate_list = []
 
     for i in range(data["total_fee"].shape[0]-1):
-        rate_list.append(data["total_fee"][i] / data["total_fee"][i + 1])
+        try:
+            rate_list.append(data["total_fee"][i] / data["total_fee"][i + 1])
+        except:
+            continue
 
     if len(rate_list) != 0:
         rate_arr = np.array(rate_list)
@@ -670,7 +681,7 @@ def get_bill_feature(data, total_dict):
 
 
 def fields_handle(x):
-    if isinstance(int,x):
+    if isinstance(x,int):
         x =str(x)
     elif x == True:
         x = '1'
@@ -681,7 +692,7 @@ def fields_handle(x):
     return str(x)
 
 
-def write_resutl_to_file(result):
+def write_resutl_to_file(result,result_file):
     values = []
     with open("head") as f:
         head = f.read().replace("\n","").split("^")
@@ -689,56 +700,60 @@ def write_resutl_to_file(result):
             value =result.get(field,"")
             values.append(value)
     line = ",".join(list(map(fields_handle,values))) + "\n"
-    with open("result.csv","a",encoding="utf-8") as f:
+    with open(result_file,"a",encoding="utf-8") as f:
         f.write(line)
 
 
 def main():
-    for i in range(1,160):
-        real_name =  f"ykd_clear_file/ykd_{i}.txt"
-        f = open(real_name,encoding="utf-8")
-        for index,line in enumerate(f):
-            print(real_name,index)
-            record = json.loads(line)
-            try:
-                basicInfo_ = record["basicInfo"]
-                billRecord_ = record["billRecord"]
-                callRecord_ = record["callRecord"]
-                payRecord_ = record["payRecord"]
-                smsRecord_ = record["smsRecord"]
-                # 删除detail_id,location_type特征
-                basicInfo = basicInfo_
-                callRecord = pd.DataFrame(pd.read_json(json.dumps(callRecord_)))
-                callRecord.drop(["details_id", "location_type"], axis=1, inplace=True)
-                # 格式化时间
-                callRecord["time"] = pd.to_datetime(callRecord["time"])
-                # 格式化手机号
-                callRecord["peer_number"] = callRecord["peer_number"].astype("str")
-                # 转化成主叫1，被叫0
-                callRecord["dial_type"] = callRecord["dial_type"].map(lambda x: 1 if x == "DIAL" else 0)
-                # 添加联系人的归属地
-                callRecord["peer_localtion"] = callRecord["peer_number"].map(findAttribution)
+    # 结果和错误的文件名
+    result_file = "result_4.csv"
+    failed_file = "failed_4"
 
-                result = dict()
-                result.update(call_basic(callRecord,basicInfo))
-                for i in [m1,m3,m5]:
-                    result.update(call_duration(callRecord,i))
-                    result.update(call_period(callRecord,i))
-                    result.update(contacter_location(callRecord,i))
-                    result.update(contacter_num(callRecord,i))
-                    result.update(call_summarizing(callRecord,i))
-                    result.update(call_fee(callRecord,i))
-                # ==========微微==========
-                result = get_info_data(basicInfo_, result)
-                result = get_sms_feature(smsRecord_, result)
-                result =get_pay_feature(payRecord_, result)
-                result =get_bill_feature(billRecord_, result)
-                write_resutl_to_file(result)
-            except :
-                traceback.print_exc()
-                with open("failed","a",encoding="utf") as f:
-                    f.write(real_name +"^"+line)
-        f.close()
+    real_name =  "failed"
+    f = open(real_name,encoding="utf-8")
+    for index,line in enumerate(f):
+        print(real_name,index)
+        line = line.split(".txt^")[-1]
+        record = json.loads(line)
+        try:
+            basicInfo_ = record["basicInfo"]
+            billRecord_ = record["billRecord"]
+            callRecord_ = record["callRecord"]
+            payRecord_ = record["payRecord"]
+            smsRecord_ = record["smsRecord"]
+            # 删除detail_id,location_type特征
+            basicInfo = basicInfo_
+            callRecord = pd.DataFrame(pd.read_json(json.dumps(callRecord_)))
+            callRecord.drop(["details_id", "location_type"], axis=1, inplace=True)
+            # 格式化时间
+            callRecord["time"] = pd.to_datetime(callRecord["time"])
+            # 格式化手机号
+            callRecord["peer_number"] = callRecord["peer_number"].astype("str")
+            # 转化成主叫1，被叫0
+            callRecord["dial_type"] = callRecord["dial_type"].map(lambda x: 1 if x == "DIAL" else 0)
+            # 添加联系人的归属地
+            callRecord["peer_localtion"] = callRecord["peer_number"].map(findAttribution)
+
+            result = dict()
+            result.update(call_basic(callRecord,basicInfo))
+            for i in [m1,m3,m5]:
+                result.update(call_duration(callRecord,i))
+                result.update(call_period(callRecord,i))
+                result.update(contacter_location(callRecord,i))
+                result.update(contacter_num(callRecord,i))
+                result.update(call_summarizing(callRecord,i))
+                result.update(call_fee(callRecord,i))
+            # ==========微微==========
+            result = get_info_data(basicInfo_, result)
+            result = get_sms_feature(smsRecord_, result)
+            result =get_pay_feature(payRecord_, result)
+            result =get_bill_feature(billRecord_, result)
+            write_resutl_to_file(result,result_file)
+        except :
+            traceback.print_exc()
+            with open(failed_file,"a",encoding="utf") as f:
+                f.write(real_name +"^"+line)
+    f.close()
 
 
 
