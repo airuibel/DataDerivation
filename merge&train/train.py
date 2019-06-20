@@ -3,10 +3,11 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import math
 
+# 数据读取
 data = pd.read_csv("last_result.csv")
 
 
-#去掉特征文件无关字段
+#去掉特征文件无关字段和标签字段
 drop_columns=["name","idcard","mobile_state","email","living_city","friends_city",
               "keep_touch_7day","keep_touch_1m","living_city_attribution","living_city_friends_city",
               "living_city_birthplace","level","label"]
@@ -15,7 +16,6 @@ drop_columns=["name","idcard","mobile_state","email","living_city","friends_city
 feature = list(data.columns)
 for name in drop_columns:
     feature.remove(name)
-
 
 #训练集和测试集划分
 x_train, x_test, y_train, y_test = train_test_split(data[feature], data["label"], train_size=0.7, random_state=101)
